@@ -1,0 +1,634 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartPCOD | PCOD Risk Detection</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ffe6f0, #f5e6ff);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Navbar */
+
+        .navbar {
+            background: linear-gradient(90deg, #d63384, #9b59b6);
+            color: white;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .nav-text {
+            font-size: 14px;
+        }
+
+        /* Main */
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            color: #9b2c6b;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        /* Cards */
+
+        .cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .card h2 {
+            color: #9b2c6b;
+            margin-bottom: 20px;
+        }
+
+        /* Form */
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #d63384;
+            box-shadow: 0 0 5px rgba(214,51,132,0.25);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #d63384, #9b59b6);
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(155,89,182,0.3);
+        }
+
+        /* Result */
+
+        .result-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            background: #fff0f6;
+            border: 1px solid #f3b5d0;
+        }
+
+        .result-box h3 {
+            color: #d63384;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .risk-score {
+            font-size: 18px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* Chart */
+
+        .chart-container {
+            margin-top: 30px;
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .chart-container h2 {
+            text-align: center;
+            color: #9b2c6b;
+            margin-bottom: 20px;
+        }
+
+        /* Info */
+
+        .info {
+            margin-top: 25px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .info h3 {
+            color: #9b2c6b;
+            margin-bottom: 10px;
+        }
+
+        .info ul {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        /* Footer */
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            background: #9b2c6b;
+            color: white;
+            font-size: 13px;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 768px) {
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- Navbar -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🌸 SmartPCOD
+    </div>
+
+    <div class="nav-text">
+        AI-Based PCOD Risk Detection
+    </div>
+
+</nav>
+
+
+<!-- Main -->
+
+<div class="container">
+
+    <!-- Hero -->
+
+    <div class="hero">
+
+        <h1>PCOD Risk Detection System</h1>
+
+        <p>
+            Enter your basic health information to check your PCOD risk level.
+        </p>
+
+    </div>
+
+
+    <!-- Cards -->
+
+    <div class="cards">
+
+        <!-- Form Card -->
+
+        <div class="card">
+
+            <h2>🩺 Health Information</h2>
+
+            <form action="/predict" method="POST">
+
+                <!-- Age -->
+
+                <div class="form-group">
+
+                    <label>Age</label>
+
+                    <input
+                        type="number"
+                        name="age"
+                        placeholder="Enter your age"
+                        min="10"
+                        max="60"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- BMI -->
+
+                <div class="form-group">
+
+                    <label>BMI</label>
+
+                    <input
+                        type="number"
+                        name="bmi"
+                        placeholder="Enter BMI"
+                        step="0.1"
+                        min="10"
+                        max="60"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Cycle -->
+
+                <div class="form-group">
+
+                    <label>Menstrual Cycle</label>
+
+                    <select name="cycle" required>
+
+                        <option value="">
+                            Select option
+                        </option>
+
+                        <option value="0">
+                            Regular
+                        </option>
+
+                        <option value="1">
+                            Irregular
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Acne -->
+
+                <div class="form-group">
+
+                    <label>Acne</label>
+
+                    <select name="acne" required>
+
+                        <option value="">
+                            Select option
+                        </option>
+
+                        <option value="0">
+                            No
+                        </option>
+
+                        <option value="1">
+                            Yes
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Hair Growth -->
+
+                <div class="form-group">
+
+                    <label>Excess Hair Growth</label>
+
+                    <select name="hair_growth" required>
+
+                        <option value="">
+                            Select option
+                        </option>
+
+                        <option value="0">
+                            No
+                        </option>
+
+                        <option value="1">
+                            Yes
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Button -->
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    🔍 Check PCOD Risk
+                </button>
+
+            </form>
+
+
+            <!-- Result -->
+
+            {% if prediction_text %}
+
+            <div class="result-box">
+
+                <h3>
+                    {{ prediction_text }}
+                </h3>
+
+                <p class="risk-score">
+                    Risk Score: {{ risk_score }}%
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Information Card -->
+
+        <div class="card">
+
+            <h2>💡 About SmartPCOD</h2>
+
+            <p style="line-height:1.8; color:#666;">
+
+                SmartPCOD is an educational machine-learning
+                based system that analyzes selected health-related
+                inputs and provides an estimated PCOD risk level.
+
+            </p>
+
+            <br>
+
+            <h3 style="color:#d63384;">
+                📊 Parameters Used
+            </h3>
+
+            <br>
+
+            <ul style="line-height:2; padding-left:20px;">
+
+                <li>Age</li>
+
+                <li>BMI</li>
+
+                <li>Menstrual Cycle</li>
+
+                <li>Acne</li>
+
+                <li>Excess Hair Growth</li>
+
+            </ul>
+
+            <br>
+
+            <h3 style="color:#d63384;">
+                🤖 Machine Learning
+            </h3>
+
+            <br>
+
+            <p style="color:#666; line-height:1.7;">
+
+                The system uses a Random Forest classification
+                model trained on the provided dataset.
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Chart -->
+
+    <div class="chart-container">
+
+        <h2>
+            📈 Prediction History
+        </h2>
+
+        <canvas id="myChart"></canvas>
+
+    </div>
+
+
+    <!-- Information -->
+
+    <div class="info">
+
+        <h3>
+            ⚠️ Important Information
+        </h3>
+
+        <ul>
+
+            <li>
+                This system is developed for educational purposes.
+            </li>
+
+            <li>
+                The prediction should not be considered a medical diagnosis.
+            </li>
+
+            <li>
+                Consult a qualified healthcare professional for proper evaluation.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+
+<!-- Footer -->
+
+<footer>
+
+    © 2026 SmartPCOD | AI-Based PCOD Risk Detection System
+
+</footer>
+
+
+<!-- Chart Script -->
+
+<script>
+
+async function loadChart() {
+
+    try {
+
+        const response = await fetch("/data");
+
+        const data = await response.json();
+
+        const ctx =
+            document
+            .getElementById("myChart")
+            .getContext("2d");
+
+
+        new Chart(ctx, {
+
+            type: "line",
+
+            data: {
+
+                labels: data.labels,
+
+                datasets: [{
+
+                    label: "PCOD Risk",
+
+                    data: data.values,
+
+                    borderWidth: 3,
+
+                    tension: 0.3,
+
+                    fill: false,
+
+                    pointRadius: 5
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                scales: {
+
+                    y: {
+
+                        min: 0,
+
+                        max: 1,
+
+                        ticks: {
+
+                            stepSize: 0.5,
+
+                            callback: function(value) {
+
+                                if (value === 1)
+                                    return "High";
+
+                                if (value === 0.5)
+                                    return "Medium";
+
+                                return "Low";
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Unable to load prediction history."
+        );
+
+    }
+
+}
+
+loadChart();
+
+</script>
+
+</body>
+
+</html>
+
